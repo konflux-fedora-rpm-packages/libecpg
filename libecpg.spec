@@ -2,7 +2,7 @@
 
 Summary: ECPG - Embedded SQL in C
 Name: libecpg
-Version: %majorversion.1
+Version: %majorversion.4
 Release: 2%{?dist}
 
 License: PostgreSQL
@@ -70,6 +70,7 @@ find . -type f -name .gitignore | xargs rm
 
 
 %build
+export CFLAGS="$CFLAGS -std=c17"
 # We don't build server nor client (e.g. /bin/psql) binaries in this package, so
 # we can disable some configure options.
 %configure \
@@ -81,7 +82,7 @@ find . -type f -name .gitignore | xargs rm
     --without-readline \
     --datadir=%_datadir/pgsql
 
-%make_build -C "src/interfaces/ecpg"
+%make_build -C "src/interfaces/ecpg" -j1
 
 
 %install
@@ -132,6 +133,20 @@ find_lang_bins %name-devel.lst  ecpg
 
 
 %changelog
+* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 16.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Thu Aug 29 2024 Ales Nezbeda <anezbeda@redhat.com> - 16.4-1
+- Update to 16.4
+- Fix compilation sometimes failing due to race condition in makefile
+- Resolves: BZ:2290330
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 16.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Mon May 27 2024 Ales Nezbeda <anezbeda@redhat.com> - 16.3-1
+- Update to 16.3
+
 * Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 16.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
 
